@@ -4,7 +4,29 @@
 
 Bluebikes riders know the feeling: you walk to a station and every dock is empty, or you finish a ride and there is nowhere to return the bike. Bluebikes already sends vans around all day to move bikes between stations. This project asks a simpler question first: can anyone know ahead of time where the trouble will be? We combined a year of trip records with a month of live station readings that we collected ourselves, and used both to find the stations and hours that deserve the first van visit.
 
-Team: Adham, Mia, Daniel, Grace and Eldo (Boston University, Cohort B, Team 10).
+Team: Adham, Mia, Daniel, Grace and Eldo (Boston University MSBA, BA780, Cohort B, Team 10).
+
+## At a glance
+
+- **4.6 million trips** (Sep 2025 – Aug 2026) plus a live station log we built ourselves.
+- **Shortages are concentrated:** the 20 worst stations produce 19.5% of all empty-station readings.
+- **The biggest rider impact is predictable:** Kendall, MIT and Longwood stations on weekday evenings, 4–8 pm.
+- **Recommendation:** an evening restocking loop from 5 pm, starting at Ames St at Main St, and a priority list refreshed weekly from the live feed.
+
+## My role (Mia Hung)
+
+This was a five-person project. My parts were:
+
+- **Trip data cleaning (Section 1.1).** Combined 12 monthly trip files (4,605,371 rows), converted timestamps, removed 74 duplicate ride IDs and trips with no start or end station: 10,455 rows (0.23%) in total, leaving 4,594,916 trips. Built the helper columns used across the project: duration, hour, day of week, weekday/weekend flag, month and date. Members take 70.5% of trips, and the median ride is 10.5 minutes.
+- **Seasonality (Q1).** Monthly ridership chart comparing summer and winter demand, which showed how strongly ridership follows the season and temperature.
+- **Hourly demand (Q2).** Weekday vs. weekend trips by hour. Weekday demand follows the commute, peaking around 8 am and 5 pm; weekend demand is spread out around midday. This timing pattern is what the later shortage analysis builds on.
+- **Rider impact (Q14).** Estimated how many riders arrive to find no bike, as departures per hour multiplied by the share of time the station is empty. All ten worst weekday station-hours are Kendall, MIT and Longwood stations between 4 and 8 pm, led by Ames St at Main St at 6 pm.
+- **Rebalancing priorities (Q15).** Turned the findings into an action list: short morning shuttles between each big drainer and its nearest filler (median 0.85 km apart), covering 40 priority station-hours at 25 stations.
+- **Presentation.** Presented slides 9 and 10 (rider impact and rebalancing priorities) and the related stakeholder Q&A.
+
+## Tools
+
+Python (pandas, NumPy, matplotlib) · Google Colab · GitHub Actions (scheduled data collection) · Git/GitHub
 
 ## Research questions
 
@@ -57,7 +79,7 @@ Everything above comes from one notebook, [B10-Running-On-Empty.ipynb](B10-Runni
 
 ## Collecting live availability data
 
-Trips tell us where bikes go, not whether a station was empty: when the vans refill a station in time, riders still find bikes, and a rider who walks away from an empty dock leaves no trip at all. Bluebikes publishes the current state of every station in its public GBFS feed, but no history. So we wrote a small Python script, scheduled with GitHub Actions, that saves the number of bikes and docks at every station about every ten minutes and commits a daily CSV. It lives in its own repository, [AdhamKhouly/bluebikes-logger](https://github.com/AdhamKhouly/bluebikes-logger), which is where the data was collected and still grows. The script and workflow are copied into [logger/](logger/) here for reference, with a README that explains how they work, why the first weeks were thin, and what changed on October 7. The 31 daily files the notebook uses are in [data/gbfs-logs/](data/gbfs-logs/).
+Trips tell us where bikes go, not whether a station was empty: when the vans refill a station in time, riders still find bikes, and a rider who walks away from an empty dock leaves no trip at all. Bluebikes publishes the current state of every station in its public GBFS feed, but no history. So we wrote a small Python script, scheduled with GitHub Actions, that saves the number of bikes and docks at every station about every ten minutes and commits a daily CSV. It lives in its own repository, [AdhamKhouly/bluebikes-logger](https://github.com/AdhamKhouly/bluebikes-logger), which is where the data was collected and still grows. The script and workflow are copied into [logger/](logger) here for reference, with a README that explains how they work, why the first weeks were thin, and what changed on October 7. The 31 daily files the notebook uses are in [data/gbfs-logs/](data/gbfs-logs).
 
 ## Running the notebook
 
@@ -66,3 +88,7 @@ The notebook was written for Google Colab and reads its data from a Google Drive
 ## Limitations
 
 The live log is short: 11 dense days in October, not the summer peak. Van visits are estimated from jumps in bike counts, not confirmed. The prediction test covers three days, one of them a Saturday, so it is early evidence rather than a proven forecast. Trip data records completed rides, not the riders who gave up at an empty station.
+
+## Contact
+
+Mia Hung · Boston University MSBA
